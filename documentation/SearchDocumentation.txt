@@ -1,0 +1,19 @@
+The WormGUIDES search pipeline is modularized for ease of use with other model organisms. This documentation will provide a top down explanation of the components involved in the search pipeline and help developers port WormGUIDES to their own model organisms and/or modify the existing C Elegans portion of the pipeline for different ends. NOTE: The underlying data type for WormGUIDES is lineage-based.
+
+The Search pipeline is contained in WormGUIDES/src/application_src/application_model/search/
+
+The two interfaces that specify the search functionality are contained in the top level of this directory: OrganismSearch.java, OrganismSearchResults.java. Further, in WormGUIDES/src/application_src/application_model/data/, there is a class called OrganismDataType.java which species the forms of biological data supported by WormGUIDES (lineage, functional, gene).
+
+OrganismSearch.java:
+This interface defines the methods that query the standard forms of biological data: lineage, functional identification, description
+identification, connectome and genes.
+
+OrganismSearchResults.java:
+This is a top level container class which defines the data structure for organism search results. This, in combination with a generalized search interface, allows developers to more easily lift out the native Search pipeline and replace it with their own without affecting the other components of the application. The data structure is simply a key value pair, where the key is an OrganismDataType and the value is a List<String>. The OrganismDataType key specifies the type of data contained in the List<String>.
+
+***
+
+For an extensive example of the search implementation, please see the subdirectories in search/, which contain the native implementation of a C Elegans search pipeline. 
+
+    The classes in CElegansSearch/ contain the implementations of the OrganismSearch.java interface, and query community data (both internally loaded and queried from the web).
+    The classes in ModelSearch/ contain model specific search operations (neighbors and unique structures). These only need to be implemented if they are desired.
